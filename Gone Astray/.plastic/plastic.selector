@@ -1,0 +1,4 @@
+repository "Gone Astray@TinySunGames@cloud"
+  path "/"
+    br "/main"
+    co "/main"
