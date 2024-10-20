@@ -4,45 +4,100 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Movement speed
+    public float moveSpeed = 5f; 
+    public float tarikanKecepatan = 2f; 
     private Rigidbody2D rb;
     private Vector2 movement;
 
-    // Start is called before the first frame update
+    private bool inAreaPanas = false;
+    private bool inAreaDingin = false;
+
+
+    public Transform areaPanas; 
+    public Transform areaDingin; 
+
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>(); // Get the Rigidbody2D component
+        rb = GetComponent<Rigidbody2D>(); 
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        // Reset movement
+    
         movement = Vector2.zero;
 
-        // Check specific WASD key inputs
-        if (Input.GetKey(KeyCode.W)) // Move up
+    
+        if (Input.GetKey(KeyCode.W)) 
         {
             movement.y = 1;
         }
-        if (Input.GetKey(KeyCode.S)) // Move down
+        if (Input.GetKey(KeyCode.S)) 
         {
             movement.y = -1;
         }
-        if (Input.GetKey(KeyCode.A)) // Move left
+        if (Input.GetKey(KeyCode.A)) 
         {
             movement.x = -1;
         }
-        if (Input.GetKey(KeyCode.D)) // Move right
+        if (Input.GetKey(KeyCode.D)) 
         {
             movement.x = 1;
         }
+
+        
+        if (movement.magnitude > 1)
+        {
+            movement.Normalize();
+        }
     }
 
-    // FixedUpdate is called at a fixed interval, best for physics-based movement
+    
     void FixedUpdate()
+{
+
+    Vector2 finalMovement = movement * moveSpeed * Time.fixedDeltaTime;
+
+    if (inAreaPanas && areaPanas != null)
     {
-        // Apply the movement to the Rigidbody2D
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        Vector2 targetPosition = areaPanas.position; 
+        Vector2 direction = (targetPosition - rb.position).normalized; 
+        finalMovement += direction * tarikanKecepatan * Time.fixedDeltaTime; 
+    }
+    else if (inAreaDingin && areaDingin != null)
+    {
+        Vector2 targetPosition = areaDingin.position; 
+        Vector2 direction = (targetPosition - rb.position).normalized; 
+        finalMovement += direction * tarikanKecepatan * Time.fixedDeltaTime;
+    }
+
+    
+    rb.MovePosition(rb.position + finalMovement);
+}
+
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("AreaPanas"))
+        {
+            inAreaPanas = true;
+        }
+        else if (other.CompareTag("AreaDingin"))
+        {
+            inAreaDingin = true;
+        }
+    }
+
+    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("AreaPanas"))
+        {
+            inAreaPanas = false;
+        }
+        else if (other.CompareTag("AreaDingin"))
+        {
+            inAreaDingin = false;
+        }
     }
 }

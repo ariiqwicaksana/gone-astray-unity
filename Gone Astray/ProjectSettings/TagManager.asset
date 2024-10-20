@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Grabbable
+  - AreaPanas
+  - AreaDingin
+  - AreaOksigen
   layers:
   - Default
   - TransparentFX
