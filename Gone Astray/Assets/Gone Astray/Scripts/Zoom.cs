@@ -32,4 +32,3 @@ public class Zoom : MonoBehaviour
         cinemachineCam.m_Lens.OrthographicSize = currentZoom;
     }
 }
-
