@@ -13,8 +13,8 @@ public class Movement : MonoBehaviour
     private bool inAreaDingin = false;
 
 
-    public Transform areaPanas; 
-    public Transform areaDingin; 
+    public List<Transform> areaPanasList = new List<Transform>();
+    public List<Transform> areaDinginList = new List<Transform>(); 
 
     void Start()
     {
@@ -56,25 +56,8 @@ public class Movement : MonoBehaviour
     void FixedUpdate()
 {
 
-    Vector2 finalMovement = movement * moveSpeed * Time.fixedDeltaTime;
-
-    if (inAreaPanas && areaPanas != null)
-    {
-        Vector2 targetPosition = areaPanas.position; 
-        Vector2 direction = (targetPosition - rb.position).normalized; 
-        finalMovement += direction * tarikanKecepatan * Time.fixedDeltaTime; 
-    }
-    else if (inAreaDingin && areaDingin != null)
-    {
-        Vector2 targetPosition = areaDingin.position; 
-        Vector2 direction = (targetPosition - rb.position).normalized; 
-        finalMovement += direction * tarikanKecepatan * Time.fixedDeltaTime;
-    }
-
-    
-    rb.MovePosition(rb.position + finalMovement);
+    rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
 }
-
     
     private void OnTriggerEnter2D(Collider2D other)
     {

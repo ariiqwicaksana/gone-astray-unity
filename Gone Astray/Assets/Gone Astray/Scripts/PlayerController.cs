@@ -6,60 +6,26 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    
-    public Slider sliderSuhuPanas;     
-    public Slider sliderSuhuDingin;   
-    public Slider sliderOksigen;       
-    public Image fillSuhuPanasImage;   
-    public Image fillSuhuDinginImage;   
+    public Image circleOksigen;
+    public Image circleSuhuPanas;
+    public Image circleSuhuDingin;
+    public WarningSign warningSign;
     public GameObject gameOverCanvas;   
-
-    private float suhuPanas = 0f;      
-    private float suhuDingin = 0f;     
-    public float maksimumSuhu = 100f;   
+    private float suhuPanas = 0f;
+    private float suhuDingin = 0f;
+    private float oksigen = 100f;
+    public float maksimumSuhu = 100f;
+    public float maksimumOksigen = 100f; 
     public float kecepatanSuhu = 10f;   
-    
-    private float oksigen = 100f;        
-    public float maksimumOksigen = 100f;
     public float kecepatanPenggunaanOksigen = 5f; 
     public float kecepatanPengisianOksigen = 20f; 
-    
-
-    
     private bool isDead = false;
-
-
     private bool inAreaPanas = false;
     private bool inAreaDingin = false;
     private bool inAreaPengisianOksigen = false;
 
     void Start()
     {
-    
-        if (sliderSuhuPanas != null)
-        {
-            sliderSuhuPanas.minValue = 0f;
-            sliderSuhuPanas.maxValue = maksimumSuhu;
-            sliderSuhuPanas.value = 0f; 
-        }
-
-        
-        if (sliderSuhuDingin != null)
-        {
-            sliderSuhuDingin.minValue = 0f;
-            sliderSuhuDingin.maxValue = maksimumSuhu;
-            sliderSuhuDingin.value = 0f; 
-        }
-
-        
-        if (sliderOksigen != null)
-        {
-            sliderOksigen.minValue = 0f;
-            sliderOksigen.maxValue = maksimumOksigen;
-            sliderOksigen.value = maksimumOksigen;
-        }
-
-        
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
@@ -69,65 +35,51 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (!isDead)
-        {
-            if (inAreaPanas)
-            {
-                suhuPanas += kecepatanSuhu * Time.deltaTime; 
-            }
-            else
-            {
-                suhuPanas -= kecepatanSuhu * Time.deltaTime;
-            }
+    {
+        
+        if (inAreaPanas)
+            suhuPanas += kecepatanSuhu * Time.deltaTime;
+        else
+            suhuPanas -= kecepatanSuhu * Time.deltaTime;
+
+
+        if (inAreaDingin)
+            suhuDingin += kecepatanSuhu * Time.deltaTime;
+        else
+            suhuDingin -= kecepatanSuhu * Time.deltaTime;
 
         
-            if (inAreaDingin)
-            {
-                suhuDingin += kecepatanSuhu * Time.deltaTime; 
-            }
-            else
-            {
-                suhuDingin -= kecepatanSuhu * Time.deltaTime; 
-            }
+        suhuPanas = Mathf.Clamp(suhuPanas, 0f, maksimumSuhu);
+        suhuDingin = Mathf.Clamp(suhuDingin, 0f, maksimumSuhu);
 
         
-            suhuPanas = Mathf.Clamp(suhuPanas, 0f, maksimumSuhu);
-            suhuDingin = Mathf.Clamp(suhuDingin, 0f, maksimumSuhu);
 
-            if (sliderSuhuPanas != null)
-            {
-                sliderSuhuPanas.value = suhuPanas;
-                
-            }
-
-            
-            if (sliderSuhuDingin != null)
-            {
-                sliderSuhuDingin.value = suhuDingin;
     
-            }
+        if (inAreaPengisianOksigen)
+            oksigen += kecepatanPengisianOksigen * Time.deltaTime;
+        else
+            oksigen -= kecepatanPenggunaanOksigen * Time.deltaTime;
 
-            if (inAreaPengisianOksigen)
-            {
-                oksigen += kecepatanPengisianOksigen * Time.deltaTime;
-            }
-            else
-            {
-                oksigen -= kecepatanPenggunaanOksigen * Time.deltaTime;
-            }
+        
+        oksigen = Mathf.Clamp(oksigen, 0f, maksimumOksigen);
 
-            oksigen = Mathf.Clamp(oksigen, 0f, maksimumOksigen);
-            if (sliderOksigen != null)
-            {
-                sliderOksigen.value = oksigen;
-            }
+        
+        if (circleOksigen != null)
+            circleOksigen.fillAmount = (oksigen / maksimumOksigen) * 0.5f; 
+        
+        if (circleSuhuPanas != null)
+            circleSuhuPanas.fillAmount = (suhuPanas / maksimumSuhu) * 0.25f; 
+        
+        if (circleSuhuDingin != null)
+            circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 0.25f; 
 
-            if (suhuPanas >= maksimumSuhu || suhuDingin >= maksimumSuhu || oksigen <= 0f)
-            {
-                isDead = true;
-                HandleKematian();
-            }
-            
+        
+        if (suhuPanas >= maksimumSuhu || suhuDingin >= maksimumSuhu || oksigen <= 0f)
+        {
+            isDead = true;
+            HandleKematian();
         }
+    }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -136,16 +88,19 @@ public class PlayerController : MonoBehaviour
         {
             inAreaPanas = true;
             Debug.Log("Masuk ke Area Panas");
+            warningSign.TriggerWarning(true);
         }
         else if (other.CompareTag("AreaDingin"))
         {
             inAreaDingin = true;
             Debug.Log("Masuk ke Area Dingin");
+            warningSign.TriggerWarning(true);
         }
         else if (other.CompareTag("AreaOksigen"))
         {
             inAreaPengisianOksigen = true;
             Debug.Log("Masuk ke Area Pengisian Oksigen");
+            warningSign.TriggerWarning(false);
         }
     }
 
@@ -155,16 +110,19 @@ public class PlayerController : MonoBehaviour
         {
             inAreaPanas = false;
             Debug.Log("Keluar dari Area Panas");
+            warningSign.TriggerWarning(false);
         }
         else if (other.CompareTag("AreaDingin"))
         {
             inAreaDingin = false;
             Debug.Log("Keluar dari Area Dingin");
+            warningSign.TriggerWarning(false);
         }
         else if (other.CompareTag("AreaOksigen"))
         {
             inAreaPengisianOksigen = false;
             Debug.Log("Keluar dari Area Pengisian Oksigen");
+            warningSign.TriggerWarning(false);
         }
     }
 
