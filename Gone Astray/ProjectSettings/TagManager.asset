@@ -8,6 +8,7 @@ TagManager:
   - AreaPanas
   - AreaDingin
   - AreaOksigen
+  - Spike
   layers:
   - Default
   - TransparentFX
