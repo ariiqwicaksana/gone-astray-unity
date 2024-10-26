@@ -10,6 +10,10 @@ public class Jetpack : MonoBehaviour
     public Rigidbody2D rb;
     public ParticleSystem ps;
     public float forceAmount;
+    public float maxfuel = 100f;
+    public float consumtion = 10f;
+    public UnityEngine.UI.Slider fuelbar;
+    public UnityEngine.UI.Image fuelfill;
 
     public CinemachineVirtualCamera virtualCamera; // Reference to your Cinemachine virtual camera
     public float shakeAmplitudeGain = 2.0f; // Set desired shake strength
@@ -28,6 +32,8 @@ public class Jetpack : MonoBehaviour
     private float currentAmplitude;
     private float currentFrequency;
     private float currentBlur;
+    private float currentfuel;
+
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +53,13 @@ public class Jetpack : MonoBehaviour
         {
             currentBlur = motionBlur.intensity.value; // Store the current motion blur value
         }
+        currentfuel = maxfuel;
+
+        if ( fuelbar != null)
+            {
+                fuelbar.maxValue = maxfuel;
+                fuelbar.value = currentfuel;
+            }
 
         // Set the current values to the default
         currentAmplitude = defaultAmplitude;
@@ -56,8 +69,19 @@ public class Jetpack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && currentfuel > 0 )
         {
+            currentfuel -= consumtion * Time.deltaTime;
+
+        if (currentfuel < 0)
+        {
+            currentfuel = 0; 
+        }
+
+        if (fuelbar != null)
+        {
+            fuelbar.value = currentfuel;
+        }
             // Apply force in the direction the object is facing (based on rotation)
             rb.AddForce(transform.up * forceAmount); // Move in the 'up' direction relative to the rotation
             em.enabled = true; // Enable particle effect
@@ -95,5 +119,24 @@ public class Jetpack : MonoBehaviour
                 motionBlur.intensity.value = currentBlur;
             }
         }
+        UpdatefuelfillAlpha();
+    }
+    void UpdatefuelfillAlpha ()
+    {
+        if ( fuelfill  != null)
+            {
+                Color fillcolor = fuelfill.color;
+
+                if (currentfuel <= 0)
+                {
+                    fuelbar.fillRect.gameObject.SetActive(false);
+                }
+                else
+                {
+                    fuelbar.fillRect.gameObject.SetActive(true);
+                }
+
+                fuelfill.color = fillcolor;
+            }
     }
 }

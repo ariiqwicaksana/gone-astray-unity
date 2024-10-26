@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class Rotate : MonoBehaviour
 {
-    public float rotationSpeed = 100f; // Speed of rotation
+    public float rotationSpeed = 100f;
+    public Transform[] logos; 
 
     private void Update() {
-        // Check if Q or E keys are pressed for rotation
+    
         if (Input.GetKey(KeyCode.Q)) {
-            // Rotate counterclockwise
-            transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            RotateObject(rotationSpeed);
         }
 
         if (Input.GetKey(KeyCode.E)) {
-            // Rotate clockwise
-            transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+            RotateObject(-rotationSpeed);
+        }
+    }
+
+    private void RotateObject(float speed)
+    {
+        transform.Rotate(0, 0, speed * Time.deltaTime);
+        foreach (Transform logo in logos)
+        {
+            if (logo != null)
+            {
+                logo.Rotate(0, 0, speed * Time.deltaTime);
+            }
         }
     }
 }
