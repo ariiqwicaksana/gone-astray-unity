@@ -5,130 +5,118 @@ using UnityEngine.UI;
 
 public class Pose : MonoBehaviour
 {
-    public Animator animator; // Reference to the Animator component
-    
-    // Animation state names in the Animator
-    public Grab[] grabScript; // Reference to the Grab script
+    public Animator animator;
+    public Grab[] grabScript;
     public GrapplingGun grapplingGunScript;
     public GameObject grabIcon; 
     public GameObject aimingIcon; 
     public GameObject circularIcon;
+
     private string grabState = "Grab";
     private string aimState = "Aim";
     private string circularState = "Circular";
 
-    // Start is called before the first frame update
     void Start()
     {
-    
-        // Optionally, you can set the default state (grab) at the start
         animator.Play(grabState);
         ActivateGrab();
         ShowIcon(grabIcon);
     }
 
-    // Update is called once per frame
     void Update()
     {
         HandleInput();
-    
     }
 
     void HandleInput()
     {
-        // Press 2 to switch to "Aim" animation
+        
+        if (IsAnyGrabActive() || grapplingGunScript.isGrappling)
+        {
+            Debug.Log("Cannot change pose, currently grabbing or grappling!");
+            return; 
+        }
+
+    
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            animator.Play(aimState);
             animator.SetBool("isAiming", true);
             animator.SetBool("isGrabbing", false);
             animator.SetBool("isCircular", false);
+            animator.Play(aimState);
             ActivateAiming();
-            grabIcon.SetActive(false);
-            aimingIcon.SetActive(true);
-            circularIcon.SetActive(false);
         }
-
-        // Press C to switch to "Circular" animation
-        if (Input.GetKeyDown(KeyCode.C))
+        else if (Input.GetKeyDown(KeyCode.C))
         {
-            animator.Play(circularState);
             animator.SetBool("isCircular", true);
             animator.SetBool("isAiming", false);
             animator.SetBool("isGrabbing", false);
+            animator.Play(circularState);
             ActivateCircular();
-            grabIcon.SetActive(false);
-            aimingIcon.SetActive(false);
-            circularIcon.SetActive(true);
         }
-
-        // Press 1 to switch back to "Grab" animation
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            animator.Play(grabState);
             animator.SetBool("isGrabbing", true);
             animator.SetBool("isAiming", false);
             animator.SetBool("isCircular", false);
+            animator.Play(grabState);
             ActivateGrab();
-            grabIcon.SetActive(true);
-            aimingIcon.SetActive(false);
-            circularIcon.SetActive(false);
         }
     }
+
     void ActivateGrab()
     {
-        foreach (Grab grab in grabScript)
-        {
-            if (grab != null)
-            {
-                grab.enabled = true; 
-            }
-        }
-        if (grapplingGunScript != null)
-        {
-            grapplingGunScript.enabled = false;
-        }
-        Debug.Log(" Grab scripts activated, GrapplingGun deactivated");
+        SetGrabScriptsEnabled(true);            
+        grapplingGunScript.enabled = false;     
+        ShowIcon(grabIcon);
+        Debug.Log("Grab mode activated.");
     }
 
     void ActivateAiming()
     {
-        foreach (Grab grab in grabScript)
-        {
-            if (grab != null)
-            {
-                grab.enabled = false; 
-            }
-        }
-        if (grapplingGunScript != null)
-        {
-            grapplingGunScript.enabled = true; 
-        }
-        Debug.Log("Aiming activated, Grab  deactivated");
+        SetGrabScriptsEnabled(false);           
+        grapplingGunScript.enabled = true;      
+        ShowIcon(aimingIcon);
+        Debug.Log("Aiming mode activated.");
     }
 
     void ActivateCircular()
     {
+        SetGrabScriptsEnabled(false);           
+        grapplingGunScript.enabled = false;     
+        ShowIcon(circularIcon);
+        Debug.Log("Circular mode activated.");
+    }
+
+    bool IsAnyGrabActive()
+    {
+        foreach (Grab grab in grabScript)
+        {
+            if (grab != null && grab.IsGrabbing) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void SetGrabScriptsEnabled(bool isEnabled)
+    {
         foreach (Grab grab in grabScript)
         {
             if (grab != null)
             {
-                grab.enabled = false; 
+                grab.enabled = isEnabled; 
             }
         }
-        if (grapplingGunScript != null)
-        {
-            grapplingGunScript.enabled = false; 
-        }
-        Debug.Log("Circular activated, all Grab and GrapplingGun deactivated");
     }
+
     void ShowIcon(GameObject iconToShow)
     {
-        
-        grabIcon.SetActive(true);
+    
+        grabIcon.SetActive(false);
         aimingIcon.SetActive(false);
         circularIcon.SetActive(false);
-
         iconToShow.SetActive(true);
     }
 }

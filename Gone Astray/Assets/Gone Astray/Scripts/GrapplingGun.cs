@@ -2,6 +2,7 @@
 
 public class GrapplingGun : MonoBehaviour
 {
+    [HideInInspector] public bool isGrabbing = false;
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
 
@@ -27,7 +28,7 @@ public class GrapplingGun : MonoBehaviour
 
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
-    [SerializeField] private float maxDistnace = 20;
+    [SerializeField] private float maxDistance = 20;
 
     private enum LaunchType
     {
@@ -43,12 +44,12 @@ public class GrapplingGun : MonoBehaviour
     [Header("No Launch To Point")]
     [SerializeField] private bool autoConfigureDistance = false;
     [SerializeField] private float targetDistance = 3;
-    [SerializeField] private float targetFrequncy = 1;
+    [SerializeField] private float targetFrequency = 1;
 
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
-    private bool isGrappling = false;  // Keeps track of grappling state
+    public bool isGrappling = false;  // Keeps track of grappling state
 
     private void Start()
     {
@@ -58,18 +59,22 @@ public class GrapplingGun : MonoBehaviour
 
     private void Update()
     {
-        HandleGrappling(); // Grapple using F key
+        if (!isGrabbing)
+        {
+            HandleGrappling(); 
+        }
+        
     }
 
     void HandleGrappling()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F)) 
         {
-            if (!isGrappling)
+            if (!isGrappling) 
             {
                 SetGrapplePoint();
             }
-            else
+            else 
             {
                 ReleaseGrapple();
             }
@@ -84,7 +89,7 @@ public class GrapplingGun : MonoBehaviour
 
         if (_hit && (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll))
         {
-            if (Vector2.Distance(_hit.point, firePoint.position) <= maxDistnace || !hasMaxDistance)
+            if (Vector2.Distance(_hit.point, firePoint.position) <= maxDistance || !hasMaxDistance)
             {
                 grapplePoint = _hit.point;
                 grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
@@ -103,7 +108,7 @@ public class GrapplingGun : MonoBehaviour
         if (!launchToPoint && !autoConfigureDistance)
         {
             m_springJoint2D.distance = targetDistance;
-            m_springJoint2D.frequency = targetFrequncy;
+            m_springJoint2D.frequency = targetFrequency;
         }
 
         if (!launchToPoint)
@@ -144,6 +149,7 @@ public class GrapplingGun : MonoBehaviour
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         isGrappling = false;
+        Debug.Log("Grapple released.");
     }
 
     private void OnDrawGizmosSelected()
@@ -151,7 +157,7 @@ public class GrapplingGun : MonoBehaviour
         if (firePoint != null && hasMaxDistance)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(firePoint.position, maxDistnace);
+            Gizmos.DrawWireSphere(firePoint.position, maxDistance);
         }
     }
 }

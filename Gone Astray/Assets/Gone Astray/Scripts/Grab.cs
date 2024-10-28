@@ -6,7 +6,8 @@ public class Grab : MonoBehaviour
 {
     private bool isGrabbing = false; // Flag to track whether the player is grabbing an object
     private FixedJoint2D currentJoint; // To store the currently active joint
-    public float grabRange = 1.5f; // Maximum range to detect objects for grabbing
+    public float grabRange = 1.5f;
+    public bool IsGrabbing => isGrabbing; // Maximum range to detect objects for grabbing
 
     // Update is called once per frame
     void Update()
