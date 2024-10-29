@@ -15,11 +15,12 @@ public class Pose : MonoBehaviour
     private string grabState = "Grab";
     private string aimState = "Aim";
     private string circularState = "Circular";
+    private string normalState = "Normal";
 
     void Start()
     {
-        animator.Play(grabState);
-        ActivateGrab();
+        animator.Play(normalState);
+        ActivateNormal();
         ShowIcon(grabIcon);
     }
 
@@ -38,29 +39,41 @@ public class Pose : MonoBehaviour
         }
 
     
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             animator.SetBool("isAiming", true);
             animator.SetBool("isGrabbing", false);
             animator.SetBool("isCircular", false);
+            animator.SetBool("isNormal", false);
             animator.Play(aimState);
             ActivateAiming();
         }
-        else if (Input.GetKeyDown(KeyCode.C))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             animator.SetBool("isCircular", true);
             animator.SetBool("isAiming", false);
             animator.SetBool("isGrabbing", false);
+            animator.SetBool("isNormal", false);
             animator.Play(circularState);
             ActivateCircular();
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             animator.SetBool("isGrabbing", true);
             animator.SetBool("isAiming", false);
             animator.SetBool("isCircular", false);
+            animator.SetBool("isNormal", false);
             animator.Play(grabState);
             ActivateGrab();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            animator.SetBool("isNormal", true);
+            animator.SetBool("isGrabbing", false);
+            animator.SetBool("isCircular", false);
+            animator.SetBool("isAiming", false);
+            animator.Play(normalState);
+            ActivateNormal();
         }
     }
 
@@ -86,6 +99,13 @@ public class Pose : MonoBehaviour
         grapplingGunScript.enabled = false;     
         ShowIcon(circularIcon);
         Debug.Log("Circular mode activated.");
+    }
+
+    void ActivateNormal()
+    {
+        SetGrabScriptsEnabled(false);           
+        grapplingGunScript.enabled = false;
+        Debug.Log("Normal mode activated.");
     }
 
     bool IsAnyGrabActive()

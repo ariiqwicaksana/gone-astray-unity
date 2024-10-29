@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -19,10 +20,19 @@ public class PlayerController : MonoBehaviour
     public float kecepatanSuhu = 10f;   
     public float kecepatanPenggunaanOksigen = 5f; 
     public float kecepatanPengisianOksigen = 20f; 
+    public float decreaseRate = 0.5f;
     private bool isDead = false;
     private bool inAreaPanas = false;
     private bool inAreaDingin = false;
     private bool inAreaPengisianOksigen = false;
+    [SerializeField] private ScriptableRendererFeature fullScreenFire;
+    [SerializeField] private ScriptableRendererFeature fullScreenIce;
+    [SerializeField] private Material fireMaterial;
+    [SerializeField] private Material iceMaterial;
+    [SerializeField] private float firescreenIntensityStat = 0f;
+    [SerializeField] private float icescreenIntensityStat = 0f;
+    private int firescreenIntensity = Shader.PropertyToID("_FirescreenIntensity");
+    private int icescreenIntensity = Shader.PropertyToID("_IcescreenIntensity");
 
     void Start()
     {
@@ -30,6 +40,13 @@ public class PlayerController : MonoBehaviour
         {
             gameOverCanvas.SetActive(false);
         }
+
+        firescreenIntensityStat = 0f;
+        icescreenIntensityStat = 0f;
+        if (fireMaterial != null)
+            fireMaterial.SetFloat(firescreenIntensity, firescreenIntensityStat);
+        if (iceMaterial != null)
+            iceMaterial.SetFloat(icescreenIntensity, icescreenIntensityStat);
     }
 
     void Update()
@@ -73,6 +90,28 @@ public class PlayerController : MonoBehaviour
         if (circleSuhuDingin != null)
             circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 0.25f; 
 
+        if (inAreaPanas && fireMaterial != null)
+            {
+                firescreenIntensityStat = suhuPanas / maksimumSuhu;
+                fireMaterial.SetFloat(firescreenIntensity, firescreenIntensityStat);
+            }
+            else if (inAreaDingin && iceMaterial != null)
+            {
+                icescreenIntensityStat = suhuDingin / maksimumSuhu;
+                iceMaterial.SetFloat(icescreenIntensity, icescreenIntensityStat);
+            }
+            else
+            {
+                // Gradually decrease the fullscreen intensity if not in hot or cold area
+                firescreenIntensityStat = Mathf.Max(0, firescreenIntensityStat - decreaseRate * Time.deltaTime);
+                icescreenIntensityStat = Mathf.Max(0, icescreenIntensityStat - decreaseRate * Time.deltaTime);
+
+                // Apply the decreased intensity to both materials to ensure they fade out
+                if (fireMaterial != null)
+                    fireMaterial.SetFloat(firescreenIntensity, firescreenIntensityStat);
+                if (iceMaterial != null)
+                    iceMaterial.SetFloat(icescreenIntensity, icescreenIntensityStat);
+            }
         
         if (suhuPanas >= maksimumSuhu || suhuDingin >= maksimumSuhu || oksigen <= 0f)
         {

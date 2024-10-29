@@ -1078,7 +1078,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "2e99c1b17fc549fe80b6ce6459fa427a",
     "m_Id": 0,
-    "m_DisplayName": "FullscreenIntensity",
+    "m_DisplayName": "IcescreenIntensity",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -3003,10 +3003,10 @@
     "m_Guid": {
         "m_GuidSerialized": "a8cb186d-0d06-4780-abe3-089c4ff50e40"
     },
-    "m_Name": "FullscreenIntensity",
+    "m_Name": "IcescreenIntensity",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "FullscreenIntensity",
-    "m_DefaultReferenceName": "_FullscreenIntensity",
+    "m_RefNameGeneratedByDisplayName": "IcescreenIntensity",
+    "m_DefaultReferenceName": "_IcescreenIntensity",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
