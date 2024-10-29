@@ -41,7 +41,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _FullscreenIntensity: 0.408
+    - _FullscreenIntensity: 0
     - _Fullscreen_AlphaBlendOperation: 0
     - _Fullscreen_BlendMode: 1
     - _Fullscreen_ColorBlendOperation: 0
@@ -50,6 +50,7 @@ Material:
     - _Fullscreen_DstColorBlend: 10
     - _Fullscreen_SrcAlphaBlend: 1
     - _Fullscreen_SrcColorBlend: 5
+    - _IcescreenIntensity: 0
     - _VignetteIntensity: 0.861
     - _VignetteRadiusPower: 18.17
     - _VoronoiPower: 3.07
