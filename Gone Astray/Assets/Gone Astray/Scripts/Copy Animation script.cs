@@ -15,7 +15,7 @@ public class copyAnim : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         if (!isDismembered)  // Only copy rotation if not dismembered
         {

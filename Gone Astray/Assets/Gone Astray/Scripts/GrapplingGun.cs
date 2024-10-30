@@ -17,6 +17,7 @@ public class GrapplingGun : MonoBehaviour
     public Transform gunHolder;
     public Transform gunPivot;
     public Transform firePoint;
+    public LineRenderer aimLineRenderer; // New reference for Aim line renderer
 
     [Header("Physics Ref:")]
     public SpringJoint2D m_springJoint2D;
@@ -55,26 +56,27 @@ public class GrapplingGun : MonoBehaviour
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
+        aimLineRenderer.enabled = true; // Aim line active by default
     }
 
     private void Update()
     {
         if (!isGrabbing)
         {
-            HandleGrappling(); 
+            HandleGrappling();
         }
-        
     }
 
     void HandleGrappling()
     {
-        if (Input.GetKeyDown(KeyCode.F)) 
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            if (!isGrappling) 
+            if (!isGrappling)
             {
                 SetGrapplePoint();
+                aimLineRenderer.enabled = false; // Hide Aim line when shooting
             }
-            else 
+            else
             {
                 ReleaseGrapple();
             }
@@ -83,8 +85,7 @@ public class GrapplingGun : MonoBehaviour
 
     void SetGrapplePoint()
     {
-        // Use gun's current rotation to determine the grapple direction
-        Vector2 direction = gunPivot.right;  // Right side of the gun is the fire direction
+        Vector2 direction = gunPivot.right;
         RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, direction);
 
         if (_hit && (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll))
@@ -96,7 +97,7 @@ public class GrapplingGun : MonoBehaviour
                 grappleRope.enabled = true;
                 isGrappling = true;
 
-                Grapple();  // Start the grappling process
+                Grapple();
             }
         }
     }
@@ -145,10 +146,10 @@ public class GrapplingGun : MonoBehaviour
 
     void ReleaseGrapple()
     {
-        // Disable the rope and spring joint, but keep gravity scale at 0
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         isGrappling = false;
+        aimLineRenderer.enabled = true; // Re-enable Aim line after releasing
         Debug.Log("Grapple released.");
     }
 

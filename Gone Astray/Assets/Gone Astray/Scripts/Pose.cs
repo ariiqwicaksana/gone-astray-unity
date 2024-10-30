@@ -8,9 +8,11 @@ public class Pose : MonoBehaviour
     public Animator animator;
     public Grab[] grabScript;
     public GrapplingGun grapplingGunScript;
-    public GameObject grabIcon; 
-    public GameObject aimingIcon; 
+    public GameObject grabIcon;
+    public GameObject aimingIcon;
     public GameObject circularIcon;
+
+    public LineRenderer aimLineRenderer; // Add a reference to the aim line
 
     private string grabState = "Grab";
     private string aimState = "Aim";
@@ -31,14 +33,12 @@ public class Pose : MonoBehaviour
 
     void HandleInput()
     {
-        
         if (IsAnyGrabActive() || grapplingGunScript.isGrappling)
         {
             Debug.Log("Cannot change pose, currently grabbing or grappling!");
-            return; 
+            return;
         }
 
-    
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             animator.SetBool("isAiming", true);
@@ -79,32 +79,36 @@ public class Pose : MonoBehaviour
 
     void ActivateGrab()
     {
-        SetGrabScriptsEnabled(true);            
-        grapplingGunScript.enabled = false;     
+        SetGrabScriptsEnabled(true);
+        grapplingGunScript.enabled = false;
+        aimLineRenderer.enabled = false; // Disable aim line in Grab mode
         ShowIcon(grabIcon);
         Debug.Log("Grab mode activated.");
     }
 
     void ActivateAiming()
     {
-        SetGrabScriptsEnabled(false);           
-        grapplingGunScript.enabled = true;      
+        SetGrabScriptsEnabled(false);
+        grapplingGunScript.enabled = true;
+        aimLineRenderer.enabled = true; // Enable aim line in Aiming mode
         ShowIcon(aimingIcon);
         Debug.Log("Aiming mode activated.");
     }
 
     void ActivateCircular()
     {
-        SetGrabScriptsEnabled(false);           
-        grapplingGunScript.enabled = false;     
+        SetGrabScriptsEnabled(false);
+        grapplingGunScript.enabled = false;
+        aimLineRenderer.enabled = false; // Disable aim line in Circular mode
         ShowIcon(circularIcon);
         Debug.Log("Circular mode activated.");
     }
 
     void ActivateNormal()
     {
-        SetGrabScriptsEnabled(false);           
+        SetGrabScriptsEnabled(false);
         grapplingGunScript.enabled = false;
+        aimLineRenderer.enabled = false; // Disable aim line in Normal mode
         Debug.Log("Normal mode activated.");
     }
 
@@ -112,7 +116,7 @@ public class Pose : MonoBehaviour
     {
         foreach (Grab grab in grabScript)
         {
-            if (grab != null && grab.IsGrabbing) 
+            if (grab != null && grab.IsGrabbing)
             {
                 return true;
             }
@@ -126,14 +130,13 @@ public class Pose : MonoBehaviour
         {
             if (grab != null)
             {
-                grab.enabled = isEnabled; 
+                grab.enabled = isEnabled;
             }
         }
     }
 
     void ShowIcon(GameObject iconToShow)
     {
-    
         grabIcon.SetActive(false);
         aimingIcon.SetActive(false);
         circularIcon.SetActive(false);
