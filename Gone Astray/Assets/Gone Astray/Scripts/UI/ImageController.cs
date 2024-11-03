@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ImageController : MonoBehaviour
 {
@@ -32,7 +33,16 @@ public class ImageController : MonoBehaviour
         // Check if Enter is pressed and Image 1 is overlapping with Image 2
         if (isOverlapping && Input.GetKeyDown(KeyCode.Return))
         {
-            otherPanel.SetActive(true); // Activate the other panel
+            if (otherPanel.activeSelf)
+            {
+                
+                SceneManager.LoadScene("SceneUtama"); 
+            }
+            else
+            {
+                
+                otherPanel.SetActive(true);
+            } 
         }
     }
 
