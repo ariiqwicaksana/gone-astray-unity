@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
 public class HealthBar : MonoBehaviour
 {
 public Slider healthSlider;
@@ -21,17 +22,22 @@ void Update()
 	{
 		healthSlider.value = health;
 	}
-	if (Input.GetKeyDown(KeyCode.Space))
+	if(healthSlider.value != easeHealthSlider.value )
 	{
-		takeDamage(10);
-	}
-	if(healthSlider.value != easeHealthSlider.value)
-	{
-		easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, health, lerpSpeed);
+		easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, health, lerpSpeed );
 	}
 }
-	void takeDamage(float damage)
-	{
-		health -= damage;
-	}
+	public void TakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
 }

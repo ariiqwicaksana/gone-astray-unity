@@ -9,6 +9,8 @@ public class Pet : MonoBehaviour
     public float maxSpeedMultipler = 2f;
     private float originalStoppingDistance; 
     private bool isDistanceReduced = false; 
+    public bool canGrab = false; 
+
     void Start() {
         originalStoppingDistance = stoppingDistance; 
     }
@@ -24,8 +26,10 @@ public class Pet : MonoBehaviour
             Vector2 newPosition = Vector2.MoveTowards(transform.position, player.position, followSpeed * Time.deltaTime);
             transform.position = newPosition;
         }
+        
         if (Input.GetKeyDown(KeyCode.R)) {
             ToggleStoppingDistance(); 
+            canGrab = !canGrab; 
         }
     }
     void ToggleStoppingDistance() {

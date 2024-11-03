@@ -8,7 +8,8 @@ public class PetMechanic : MonoBehaviour
     private GameObject grabbedObject; 
     public float grabRange = 1.5f; 
     public float throwForce = 10f;
-    public bool IsGrabbing => isGrabbing; // Maximum range to detect objects for grabbing // Kekuatan lemparan
+    public bool IsGrabbing => isGrabbing; 
+    public Pet pet; 
 
     void Update()
     {
@@ -18,7 +19,7 @@ public class PetMechanic : MonoBehaviour
             {
                 ThrowObject();
             }
-            else
+            else if (pet.canGrab) 
             {
                 TryGrabObject();
             }
@@ -38,9 +39,9 @@ public class PetMechanic : MonoBehaviour
                 if (rb != null && grabbedObject == null)
                 {
                     grabbedObject = col.gameObject;
-                    rb.bodyType = RigidbodyType2D.Kinematic; // Set menjadi Kinematic saat diambil
-                    grabbedObject.transform.position = transform.position; // Tempatkan objek di posisi pet
-                    grabbedObject.transform.SetParent(transform); // Set sebagai anak
+                    rb.bodyType = RigidbodyType2D.Kinematic; 
+                    grabbedObject.transform.position = transform.position; 
+                    grabbedObject.transform.SetParent(transform); 
                     isGrabbing = true; 
                     break;
                 }
@@ -55,10 +56,10 @@ public class PetMechanic : MonoBehaviour
             Rigidbody2D rb = grabbedObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
-                rb.bodyType = RigidbodyType2D.Dynamic; // Kembalikan ke Dynamic saat dilempar
-                grabbedObject.transform.SetParent(null); // Lepaskan objek dari pet
-                Vector2 throwDirection = transform.right; // Arah lemparan
-                rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse); // Tambahkan gaya lempar
+                rb.bodyType = RigidbodyType2D.Dynamic; 
+                grabbedObject.transform.SetParent(null); 
+                Vector2 throwDirection = transform.right; 
+                rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse); 
                 grabbedObject = null; 
                 isGrabbing = false; 
             }
