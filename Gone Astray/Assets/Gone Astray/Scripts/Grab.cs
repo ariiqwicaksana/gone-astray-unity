@@ -69,4 +69,3 @@ public class Grab : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, grabRange);
     }
 }
-

@@ -11,6 +11,7 @@ public class Pose : MonoBehaviour
     public GameObject grabIcon;
     public GameObject aimingIcon;
     public GameObject circularIcon;
+    public GameObject NormalIcon;
 
     public LineRenderer aimLineRenderer; // Add a reference to the aim line
 
@@ -23,7 +24,7 @@ public class Pose : MonoBehaviour
     {
         animator.Play(normalState);
         ActivateNormal();
-        ShowIcon(grabIcon);
+        ShowIcon(NormalIcon);
     }
 
     void Update()
@@ -109,6 +110,7 @@ public class Pose : MonoBehaviour
         SetGrabScriptsEnabled(false);
         grapplingGunScript.enabled = false;
         aimLineRenderer.enabled = false; // Disable aim line in Normal mode
+        ShowIcon(NormalIcon);
         Debug.Log("Normal mode activated.");
     }
 
@@ -140,6 +142,7 @@ public class Pose : MonoBehaviour
         grabIcon.SetActive(false);
         aimingIcon.SetActive(false);
         circularIcon.SetActive(false);
+        NormalIcon.SetActive(false);
         iconToShow.SetActive(true);
     }
 }

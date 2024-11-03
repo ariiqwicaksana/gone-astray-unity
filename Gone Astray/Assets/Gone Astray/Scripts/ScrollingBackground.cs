@@ -2,20 +2,17 @@ using UnityEngine;
 
 public class ScrollingBackground : MonoBehaviour
 {
-    public Transform playerTransform; 
-    public float parallaxFactor = 0.5f;
-
-    private Vector3 lastPlayerPosition; 
-
+    public float scrollSpeed = 0.5f; 
+    public Vector2 direction = new Vector2(1, 0); 
+    private Material material; 
+    private Vector2 offset; 
     void Start()
     {
-        lastPlayerPosition = playerTransform.position;
+        material = GetComponent<SpriteRenderer>().material;
     }
-
     void Update()
     {
-        Vector3 deltaPosition = playerTransform.position - lastPlayerPosition;
-        transform.position += new Vector3(deltaPosition.x * parallaxFactor, deltaPosition.y * parallaxFactor, 0);
-        lastPlayerPosition = playerTransform.position;
+        offset += direction * scrollSpeed * Time.deltaTime;
+        material.mainTextureOffset = offset;
     }
 }

@@ -82,13 +82,13 @@ public class PlayerController : MonoBehaviour
 
         
         if (circleOksigen != null)
-            circleOksigen.fillAmount = (oksigen / maksimumOksigen) * 0.5f; 
+            circleOksigen.fillAmount = (oksigen / maksimumOksigen) * 1f; 
         
         if (circleSuhuPanas != null)
-            circleSuhuPanas.fillAmount = (suhuPanas / maksimumSuhu) * 0.25f; 
+            circleSuhuPanas.fillAmount = (suhuPanas / maksimumSuhu) * 1f; 
         
         if (circleSuhuDingin != null)
-            circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 0.25f; 
+            circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 1f; 
 
         if (inAreaPanas && fireMaterial != null)
             {

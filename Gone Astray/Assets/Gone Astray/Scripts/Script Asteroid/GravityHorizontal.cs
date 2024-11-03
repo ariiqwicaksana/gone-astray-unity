@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AsteroidGravity : MonoBehaviour
+public class GravityHorizontal : MonoBehaviour
 {
-    public float gravityStrength = 5f; 
-    
+    public float gravityStrength = 5f;
+
     private void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -13,8 +13,8 @@ public class AsteroidGravity : MonoBehaviour
             Rigidbody2D playerRb = other.GetComponent<Rigidbody2D>();
             if (playerRb != null)
             {
-                Vector2 direction = (transform.position - other.transform.position).normalized; 
-                playerRb.AddForce(direction * gravityStrength);
+                Vector2 downwardDirection = new Vector2(1, 0); 
+                playerRb.AddForce(downwardDirection * gravityStrength);
             }
         }
     }

@@ -6,6 +6,7 @@ public class Rotate : MonoBehaviour
 {
     public float rotationSpeed = 100f;
     public Transform[] logos; 
+    public Transform Pet;
 
     private void Update() {
     
@@ -27,6 +28,13 @@ public class Rotate : MonoBehaviour
             {
                 logo.Rotate(0, 0, speed * Time.deltaTime);
             }
+        }
+    }
+    private void RotatePet(float speed)
+    {
+        if (Pet != null)
+        {
+            Pet.Rotate(0, 0, speed * Time.deltaTime);
         }
     }
 }

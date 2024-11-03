@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 01b5e6b71729f324493bd925519889be
+guid: aacd26d3fe21366469afe092412398b7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3119020103343890530
-    second: warning_0
+      213: -2323652066694908485
+    second: robot tiny sun_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: warning_0
+      name: robot tiny sun_0
       rect:
         serializedVersion: 2
-        x: 28
-        y: 63
-        width: 456
-        height: 385
+        x: 15
+        y: 13
+        width: 35
+        height: 36
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2606d1b324cf84b20800000000000000
-      internalID: 3119020103343890530
+      spriteID: bb53c0fa1cab0cfd0800000000000000
+      internalID: -2323652066694908485
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      warning_0: 3119020103343890530
+      robot tiny sun_0: -2323652066694908485
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
