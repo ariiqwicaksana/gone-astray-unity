@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      BG full of Asteroids_0: -1608648000006091240
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
