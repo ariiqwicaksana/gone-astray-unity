@@ -150,7 +150,7 @@ TextureImporter:
         width: 91
         height: 103
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -172,7 +172,7 @@ TextureImporter:
         width: 91
         height: 103
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -185,11 +185,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: asteroid_bentuk_c_2
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 46
+        width: 51
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 884433c5f70fe264c993f4b86886abb2
+      internalID: -1381887923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 9f631274f3cf8514685be80d6833aaac
     internalID: 0
     vertices: []
     indices: 
@@ -201,6 +223,7 @@ TextureImporter:
     nameFileIdTable:
       asteroid_bentuk_c_0: -5150069065285327656
       asteroid_bentuk_c_1: 8713071624053096247
+      asteroid_bentuk_c_2: -1381887923
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
