@@ -23,6 +23,7 @@ public class Jetpack : MonoBehaviour
     private MotionBlur motionBlur;
     public float motionBlurIntensity = 0.8f;
     public float resetSpeed = 2f;
+    public AudioSource jetpackSound;
 
     private ParticleSystem.EmissionModule em;
     private CinemachineBasicMultiChannelPerlin noise;
@@ -77,10 +78,16 @@ public class Jetpack : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && currentfuel > 0)
         {
             currentfuel -= consumtion * Time.deltaTime;
+            if (!jetpackSound.isPlaying)
+            {
+            jetpackSound.Play();
+            }
 
             if (currentfuel < 0)
             {
                 currentfuel = 0;
+                jetpackSound.volume = 0;
+                
             }
 
             if (fuelbar != null)
@@ -107,6 +114,10 @@ public class Jetpack : MonoBehaviour
         else
         {
             em.enabled = false;
+            if (jetpackSound.isPlaying)
+            {
+            jetpackSound.Stop();
+            }
 
             if (noise != null)
             {

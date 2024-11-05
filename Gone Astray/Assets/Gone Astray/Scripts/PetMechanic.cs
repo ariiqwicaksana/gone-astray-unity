@@ -10,6 +10,7 @@ public class PetMechanic : MonoBehaviour
     public float throwForce = 10f;
     public bool IsGrabbing => isGrabbing; 
     public Pet pet; 
+    public AudioSource BeamSound;
 
     void Update()
     {
@@ -42,7 +43,8 @@ public class PetMechanic : MonoBehaviour
                     rb.bodyType = RigidbodyType2D.Kinematic; 
                     grabbedObject.transform.position = transform.position; 
                     grabbedObject.transform.SetParent(transform); 
-                    isGrabbing = true; 
+                    isGrabbing = true;
+                    BeamSound.Play(); 
                     break;
                 }
             }
@@ -61,6 +63,7 @@ public class PetMechanic : MonoBehaviour
                 Vector2 throwDirection = transform.right; 
                 rb.AddForce(throwDirection * throwForce, ForceMode2D.Impulse); 
                 grabbedObject = null; 
+                BeamSound.volume = 0;
                 isGrabbing = false; 
             }
         }

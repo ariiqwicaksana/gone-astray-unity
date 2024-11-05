@@ -7,8 +7,11 @@ public class AsteroidSpawner : MonoBehaviour
     public Vector2[] points;
     public float speed = 5f;
     public GameObject gameOverPanel;
+    public GameObject Player;
+    public CheckpointSystem checkpointSystem;
 
     private int currentPointIndex = 0;
+
     private void Start()
     {
         if (points.Length > 0)
@@ -24,6 +27,7 @@ public class AsteroidSpawner : MonoBehaviour
             gameOverPanel.SetActive(false);
         }
     }
+
     private void Update()
     {
         if (points.Length > 0)
@@ -39,7 +43,15 @@ public class AsteroidSpawner : MonoBehaviour
                 }
             }
         }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (checkpointSystem != null)
+            {
+                checkpointSystem.Respawn();
+            }
+        }
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -49,7 +61,9 @@ public class AsteroidSpawner : MonoBehaviour
             {
                 gameOverPanel.SetActive(true);
             }
-            Destroy(other.gameObject); 
+            Player.SetActive(false);
+            checkpointSystem.MarkPlayerAsDead();
+            
         }
     }
 }
