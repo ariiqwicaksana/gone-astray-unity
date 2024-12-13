@@ -9,14 +9,17 @@ TagManager:
   - AreaDingin
   - AreaOksigen
   - Spike
+  - FuelPickup
+  - Swirl
+  - CanBeGrab
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Minimap
   - Water
   - UI
-  - 
+  - CanBeGrab
   - 
   - 
   - Grappable

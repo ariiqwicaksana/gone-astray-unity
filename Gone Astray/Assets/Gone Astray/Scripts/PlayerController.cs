@@ -11,7 +11,8 @@ public class PlayerController : MonoBehaviour
     public Image circleSuhuPanas;
     public Image circleSuhuDingin;
     public WarningSign warningSign;
-    public GameObject gameOverCanvas;   
+    public GameObject gameOverCanvas;  
+    public AudioSource ColdSound; 
     private float suhuPanas = 0f;
     private float suhuDingin = 0f;
     private float oksigen = 100f;
@@ -82,13 +83,13 @@ public class PlayerController : MonoBehaviour
 
         
         if (circleOksigen != null)
-            circleOksigen.fillAmount = (oksigen / maksimumOksigen) * 0.5f; 
+            circleOksigen.fillAmount = (oksigen / maksimumOksigen) * 1f; 
         
         if (circleSuhuPanas != null)
-            circleSuhuPanas.fillAmount = (suhuPanas / maksimumSuhu) * 0.25f; 
+            circleSuhuPanas.fillAmount = (suhuPanas / maksimumSuhu) * 1f; 
         
         if (circleSuhuDingin != null)
-            circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 0.25f; 
+            circleSuhuDingin.fillAmount = (suhuDingin / maksimumSuhu) * 1f; 
 
         if (inAreaPanas && fireMaterial != null)
             {
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
             inAreaDingin = true;
             Debug.Log("Masuk ke Area Dingin");
             warningSign.TriggerWarning(true);
+            ColdSound.Play();
         }
         else if (other.CompareTag("AreaOksigen"))
         {
@@ -171,6 +173,7 @@ public class PlayerController : MonoBehaviour
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(true);
+            ColdSound.volume = 0;
         }
         Time.timeScale = 0f; 
     }

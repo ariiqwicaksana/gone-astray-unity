@@ -15,16 +15,15 @@ public class Jetpack : MonoBehaviour
     public float consumtion = 10f;
     public Slider fuelbar;
     public Image fuelfill;
-
     public CinemachineVirtualCamera virtualCamera;
     public float shakeAmplitudeGain = 2.0f;
     public float shakeFrequencyGain = 2.0f;
     public float shakeDuration = 0.5f;
-
     public Volume volume;
     private MotionBlur motionBlur;
     public float motionBlurIntensity = 0.8f;
     public float resetSpeed = 2f;
+    public AudioSource jetpackSound;
 
     private ParticleSystem.EmissionModule em;
     private CinemachineBasicMultiChannelPerlin noise;
@@ -33,7 +32,8 @@ public class Jetpack : MonoBehaviour
     private float currentAmplitude;
     private float currentFrequency;
     private float currentBlur;
-    private float currentfuel;
+    [SerializeField] private float currentfuel;
+
 
     private CanvasGroup fuelBarCanvasGroup;
 
@@ -41,7 +41,7 @@ public class Jetpack : MonoBehaviour
     {
         em = ps.emission;
 
-        // Setup camera shake noise
+    
         if (virtualCamera != null)
         {
             noise = virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
@@ -49,12 +49,12 @@ public class Jetpack : MonoBehaviour
             defaultFrequency = noise.m_FrequencyGain;
         }
 
-        // Setup motion blur
+        
         if (volume != null && volume.profile.TryGet(out motionBlur))
         {
             currentBlur = motionBlur.intensity.value;
         }
-        currentfuel = maxfuel;
+        currentfuel = currentfuel;
 
         if (fuelbar != null)
         {
@@ -63,28 +63,37 @@ public class Jetpack : MonoBehaviour
         }
 
         fuelBarCanvasGroup = fuelbar.GetComponent<CanvasGroup>();
-        fuelBarCanvasGroup.alpha = 0;
+        fuelBarCanvasGroup.alpha = 0; 
     }
 
     void Update()
     {
-        // Update posisi fuel bar di sebelah kanan player, tapi dalam Canvas Screen Space - Overlay
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.5f, 0));
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + new Vector3(-1.5f, 0, 0));
         fuelbar.transform.position = screenPos;
+        if (fuelbar != null)
+        {
+            fuelbar.value = currentfuel;
+        }
 
         if (Input.GetKey(KeyCode.Space) && currentfuel > 0)
         {
             currentfuel -= consumtion * Time.deltaTime;
+            if (!jetpackSound.isPlaying)
+            {
+            jetpackSound.Play();
+            }
 
             if (currentfuel < 0)
             {
                 currentfuel = 0;
+                jetpackSound.volume = 0;
+                
             }
 
             if (fuelbar != null)
             {
                 fuelbar.value = currentfuel;
-                fuelBarCanvasGroup.alpha = 1f; 
+                fuelBarCanvasGroup.alpha = 1f;
                 StopCoroutine(FadeFuelBar(0f));
             }
 
@@ -105,6 +114,10 @@ public class Jetpack : MonoBehaviour
         else
         {
             em.enabled = false;
+            if (jetpackSound.isPlaying)
+            {
+            jetpackSound.Stop();
+            }
 
             if (noise != null)
             {
@@ -123,6 +136,22 @@ public class Jetpack : MonoBehaviour
             StartCoroutine(FadeFuelBar(0f));
         }
         UpdatefuelfillAlpha();
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("FuelPickup")) 
+        {
+            currentfuel += 40f; 
+            if (currentfuel > maxfuel)
+            {
+                currentfuel = maxfuel;
+            }
+            fuelbar.value = currentfuel;
+            fuelBarCanvasGroup.alpha = 1f; 
+            StopCoroutine(FadeFuelBar(0f));
+            StartCoroutine(FadeFuelBar(0f, 2f));
+            Destroy(collision.gameObject); 
+        }
     }
 
     void UpdatefuelfillAlpha()
@@ -144,10 +173,9 @@ public class Jetpack : MonoBehaviour
         }
     }
 
-    private IEnumerator FadeFuelBar(float targetAlpha)
+    private IEnumerator FadeFuelBar(float targetAlpha, float duration = 0.2f)
     {
         float startAlpha = fuelBarCanvasGroup.alpha;
-        float duration = 0.2f;
         float elapsed = 0f;
 
         while (elapsed < duration)

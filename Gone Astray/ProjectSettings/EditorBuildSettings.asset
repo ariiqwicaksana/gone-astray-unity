@@ -6,6 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Gone Astray/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Gone Astray/Scenes/MainMenu.unity
+    guid: defd887c04a0ffb45909ddfab3c264d8
+  - enabled: 1
+    path: Assets/Gone Astray/Scenes/SceneUtama.unity
+    guid: 343e2b09343547242b3ec9d54c60e8fa
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
