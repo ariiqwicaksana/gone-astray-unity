@@ -1,45 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShockwaveManager : MonoBehaviour
 {
     [SerializeField] private float shockWaveTime = 0.75f;
-    private Coroutine shockWaveCourotine;
+    [SerializeField] private float slowShockWaveTime = 2f; 
+    private Coroutine shockWaveCoroutine;
     private Material material;
     private static int waveDistanceFromCenter = Shader.PropertyToID("_WaveDistanceFromCenter");
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            CallShockWave();
-        } 
+            CallShockWave(shockWaveTime);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            CallShockWave(slowShockWaveTime); 
+        }
     }
 
-    private void Awake ()
+    private void Awake()
     {
         material = GetComponent<SpriteRenderer>().material;
     }
 
-    private void CallShockWave()
+    private void CallShockWave(float duration)
     {
-        shockWaveCourotine = StartCoroutine(ShockWaveAction(-0.1f, 1f));
+        if (shockWaveCoroutine != null)
+        {
+            StopCoroutine(shockWaveCoroutine);
+        }
+        shockWaveCoroutine = StartCoroutine(ShockWaveAction(-0.1f, 1f, duration));
     }
 
-    private IEnumerator ShockWaveAction (float startPos, float endPos)
+    private IEnumerator ShockWaveAction(float startPos, float endPos, float duration)
     {
         material.SetFloat(waveDistanceFromCenter, startPos);
 
-        float lerpedAmount = 0f;
-
         float elapsedTime = 0f;
-        while (elapsedTime < shockWaveTime)
+        while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
 
-            lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / shockWaveTime));
+            float lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / duration));
             material.SetFloat(waveDistanceFromCenter, lerpedAmount);
 
             yield return null;
